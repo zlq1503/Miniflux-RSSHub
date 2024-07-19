@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: rsshub
+  name: rsshub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: rsshub
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: rsshub
+    spec:
+      containers:
+      - env:
+        - name: CACHE_EXPIRE
+          value: "3600"
+        - name: CACHE_TYPE
+          value: redis
+        - name: NODE_ENV
+          value: production
+        - name: REDIS_URL
+          value: redis://redis:6379/
+        - name: REQUEST_TIMEOUT
+          value: "40000"
+        image: diygod/rsshub:chromium-bundled
+        name: rsshub
+        resources: {}
+      restartPolicy: Always
